@@ -1,6 +1,9 @@
 spa.shell = (function(){
 
   var configMap = {
+    anchor_schema_map: {
+      chat: {open: true, closed: true}
+    },
     main_html: String()
       + '<div class="spa-shell-head">'
       +   '<div class="spa-shell-head-logo"></div>'
@@ -24,10 +27,91 @@ spa.shell = (function(){
   },
   stateMap = {
     $container: null,
+    anchor_map: {},
     is_chat_retracted: true
   },
   jqueryMap = {},
-  setJqueryMap, onClickChat, initModule;
+  copyAnchorMap, setJqueryMap, onClickChat, toggleChat, initModule,
+  changeAnchorPart, onHashChange;
+
+  copyAnchorMap = function(){
+    return $.extend(true, {}, stateMap.anchor_map);
+  };
+
+  //URLアンカー要素を変更する
+  //arg : {chat:"open"}
+  changeAnchorPart = function(arg_map){
+    var
+      anchor_map_revice = copyAnchorMap(),
+      bool_return = true,
+      key_name, key_name_dep;
+    
+    KEYVAL:
+    for(key_name in arg_map){
+      if(arg_map.hasOwnProperty(key_name)){
+        if(key_name.indexOf("_") === 0){continue KEYVAL;}
+
+        anchor_map_revice[key_name] = arg_map[key_name];
+
+        key_name_dep = "_" + key_name;
+        if(arg_map[key_name_dep]){
+          anchor_map_revice[key_name_dep] = arg_map[key_name_dep];
+        }
+        else{
+          delete anchor_map_revice[key_name_dep];
+          delete anchor_map_revice["_s"+key_name_dep];
+        }
+      }
+    }
+
+    try{
+      $.uriAnchor.setAnchor( anchor_map_revice );
+    }
+    catch(error){
+      $.uriAnchor.setAnchor(stateMap.anchor_map, null, true);
+      bool_return = false;
+    }
+    return bool_return;
+  };
+
+  //hashチェンジイベント
+  onHashChange = function(event){
+    var
+      anchor_map_previous = copyAnchorMap(),
+      anchor_map_proposed,
+      _s_chat_previous, _s_chat_proposed,
+      $_chat_proposed;
+
+    //ハッシュの解析
+    try{ anchor_map_proposed = $.uriAnchor.makeAnchorMap(); }
+    catch(error){
+      $.uriAnchor.setAnchor(anchor_map_previous, null, true);
+      return false;
+    }
+    //console.log(anchor_map_proposed); //{chat: "open", _s_chat: "open"}
+    stateMap.anchor_map = anchor_map_proposed;
+
+    _s_chat_previous = anchor_map_previous._s_chat;
+    _s_chat_proposed = anchor_map_proposed._s_chat;
+
+    //前回のハッシュから変更があった時、トグルの開閉を行う
+    if(!anchor_map_previous || _s_chat_previous != _s_chat_proposed){
+      s_chat_proposed = anchor_map_proposed.chat;
+      switch(s_chat_proposed){
+        case "open":
+          toggleChat(true);
+        break;
+        case "closed":
+          toggleChat(false);
+        break;
+        default:
+          toggleChat(false);
+          delete anchor_map_proposed.chat;
+          $.uriAnchor.setAnchor(anchor_map_proposed, null, true);
+      }
+    }
+    return false;
+  }
 
   setJqueryMap = function(){
     var $container = stateMap.$container;
@@ -79,7 +163,9 @@ spa.shell = (function(){
 
   //チャット閉開イベントハンドラ
   onClickChat = function(event){
-    toggleChat(stateMap.is_chat_retracted);
+    changeAnchorPart({
+      chat: (stateMap.is_chat_retracted ? "open" : "closed")
+    });
     return false;
   }
 
@@ -92,6 +178,13 @@ spa.shell = (function(){
     jqueryMap.$chat
       .attr("title", configMap.chat_retracted_title)
       .click(onClickChat);
+    
+    $.uriAnchor.configModule({
+      schema_map: configMap.anchor_schema_map
+    });
+    $(window)
+      .bind("hashchange", onHashChange)
+      .trigger("hashchange");
   };
   return {initModule: initModule};
 }());
