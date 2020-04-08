@@ -53,7 +53,8 @@ spa.chat = (function (){
     },
     jqueryMap = {},
     setJqueryMap, getEmSize, setPxSizes, setSliderPosition,
-    onClickToggle, configModule, initModule
+    onClickToggle, configModule, initModule,
+    removeSlider, handleResize
     ;
   
   getEmSize = function(elem){
@@ -167,9 +168,25 @@ spa.chat = (function (){
     return true;
   }
 
+  removeSlider = function(){
+    if(jqueryMap.$slider){
+      jqueryMap.$slider.remove();
+      jqueryMap = {};
+    }
+    stateMap.$append_target = null;
+    stateMap.position_type = "closed";
+
+    configMap.chat_model = null;
+    configMap.people_model = null;
+    configMap.set_chat_anchor = null;
+    return true;
+  };
+
   return {
     setSliderPosition: setSliderPosition,
     configModule: configModule,
-    initModule: initModule
+    initModule: initModule,
+    removeSlider: removeSlider,
+    handleResize: handleResize
   }
 }());
