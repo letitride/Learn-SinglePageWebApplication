@@ -41,15 +41,15 @@ spa.model = (function (){
 
         if(!person_map.name){continue PERSON;}
 
-        if(stateMap.user && stateMap.user.id === person_map.id){
+        if(stateMap.user && stateMap.user.id === person_map._id){
           stateMap.user.css_map = person_map.css_map;
           continue PERSON;
         }
 
         make_person_map = {
-          cid: person_map.id,
+          cid: person_map._id,
           css_map: person_map.css_map,
-          id: person_map.id,
+          id: person_map._id,
           name: person_map.name
         };
 
@@ -137,7 +137,6 @@ spa.model = (function (){
     if(id){ person.id = id; }
 
     stateMap.people_cid_map[ cid ] = person;
-
     stateMap.people_db.insert( person );
     return person;
   };
