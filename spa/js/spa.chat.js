@@ -14,12 +14,12 @@ spa.chat = (function (){
           + '<div class="spa-chat-sizer">'
             + '<div class="spa-chat-msgs"></div>'
             + '<div class="spa-chat-box">'
-              + '<input type=text/>'
+              + '<input type="text" />'
               + '<div>send</div>'
             + '</div>'
           + '</div>'
         + '</div>',
-      sttable_map: {
+      settable_map: {
         slider_open_time: true,
         slider_close_time: true,
         slider_opened_em: true,
@@ -73,7 +73,7 @@ spa.chat = (function (){
       $msgs:   $slider.find(".spa-chat-msgs"),
       $box:    $slider.find(".spa-chat-box"),
       /** ??? */
-      $input:  $slider.find(".spa-chat-input input[type=text]"),
+      $input:  $slider.find(".spa-chat-box input[type=text]"),
     };
   };
 
