@@ -22,7 +22,7 @@ spa.chat = (function (){
     spa.util.setConfigMap({
       input_map: input_map,
       settable_map: configMap.settable_map,
-      config_map: configModule
+      config_map: configMap
     });
     return true;
   }
