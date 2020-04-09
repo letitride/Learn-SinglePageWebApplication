@@ -156,7 +156,7 @@ spa.model = (function (){
       _leave: _leave_chat,
       get_chatee: get_chatee,
       join: join_chat,
-      sender_id: send_msg,
+      send_msg: send_msg,
       set_chatee: set_chatee
     };
   }());
