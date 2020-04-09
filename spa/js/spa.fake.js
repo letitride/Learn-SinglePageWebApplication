@@ -73,7 +73,7 @@ spa.fake = (function (){
       }
 
       if(msg_type === "updateavatar" && callback_map.listchange){
-        for(i=0;i<peopleList.length;i++){
+        for(var i = 0;i<peopleList.length;i++){
           if(peopleList[i]._id === data.person_id){
             peopleList[i].css_map = data.css_map;
             break;
