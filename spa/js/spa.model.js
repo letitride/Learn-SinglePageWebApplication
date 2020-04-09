@@ -57,7 +57,6 @@ spa.model = (function (){
           id: person_map._id,
           name: person_map.name
         };
-        person = makePerson( make_person_map );
 
         if(chatee && chatee.id === make_person_map.id){
           is_chatee_online = true;
@@ -131,7 +130,7 @@ spa.model = (function (){
         msg_text: msg_text
       };
 
-      _publish_updatechat([msg_text]);
+      _publish_updatechat([msg_map]);
       sio.emit("updatechat", msg_map);
       return true;
     };
@@ -217,6 +216,7 @@ spa.model = (function (){
     if(id){ person.id = id; }
 
     stateMap.people_cid_map[ cid ] = person;
+    console.log(person);
     stateMap.people_db.insert( person );
     return person;
   };

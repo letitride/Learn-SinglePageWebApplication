@@ -13,22 +13,23 @@ spa.chat = (function (){
           + '</div>'
           + '<div class="spa-chat-closer">x</div>'
           + '<div class="spa-chat-sizer">'
-            + '<div class="spa-chat-list-box"></div>'
-          + '</div>'
-          + '<div class="spa-chat-msg">'
-            + '<div class="spa-chat-msg-log"></div>'
-            + '<div class="spa-chat-msg-in">'
-              + '<form class="spa-chat-msg-form">'
-                + '<input type="text" />'
-                + '<input type="submit" style="display:none">'
-                + '<div class="spa-chat-msg-send">'
-                  + 'send'
-                + '</div>'
-              + '</form>'
+            + '<div class="spa-chat-list">'
+              + '<div class="spa-chat-list-box"></div>'
+            + '</div>'
+            + '<div class="spa-chat-msg">'
+              + '<div class="spa-chat-msg-log"></div>'
+              + '<div class="spa-chat-msg-in">'
+                + '<form class="spa-chat-msg-form">'
+                  + '<input type="text" />'
+                  + '<input type="submit" style="display:none">'
+                  + '<div class="spa-chat-msg-send">'
+                    + 'send'
+                  + '</div>'
+                + '</form>'
+              + '</div>'
             + '</div>'
           + '</div>'
-        + '</div>'
-      + '</div>',
+        + '</div>',
       settable_map: {
         slider_open_time: true,
         slider_close_time: true,
@@ -338,7 +339,6 @@ spa.chat = (function (){
 
   initModule = function($append_target){
     var $list_box;
-
     stateMap.$append_target = $append_target;
     $append_target.append(configMap.main_html);
     setJqueryMap();
@@ -356,7 +356,7 @@ spa.chat = (function (){
     $.gevent.subscribe($list_box, "spa-logout", onLogout);
     
     jqueryMap.$head.bind("utap", onTapToggle);
-    jqueryMap.$list_box.bind("utap", onTapToggle);
+    jqueryMap.$list_box.bind("utap", onTapList);
     jqueryMap.$send.bind("utap", onSubmitMsg);
     jqueryMap.$form.bind("submit", onSubmitMsg);
 
