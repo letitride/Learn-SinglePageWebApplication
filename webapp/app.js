@@ -39,6 +39,14 @@ app.post( '/user/create', function(request, response){
   response.send( {title: 'user created'});
 });
 
+app.get( '/user/read/:id([0-9]+)', function(request, response){
+  response.contentType('json');
+  response.send({
+    title: 'user with id ' + request.params.id + ' found'
+  });
+});
+
+
 server.listen( 3000 );
 
 console.log(
