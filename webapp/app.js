@@ -1,16 +1,19 @@
 var
-  connctHello, server,
+  connectHello, server,
   http = require('http'),
-  connct = require('connect'),
-  app = connct(),
+  connect = require('connect'),
+  morgan = require('morgan'),
+  app = connect(),
   bodyText = 'Hello Connect';
 
-connctHello = function( request, response, next){
+connectHello = function( request, response, next){
   response.setHeader( 'content-length', bodyText.length);
   response.end(bodyText);
 };
 
-app.use(connctHello);
+app
+  .use( morgan() )
+  .use( connectHello );
 server = http.createServer( app );
 server.listen( 3000 );
 
