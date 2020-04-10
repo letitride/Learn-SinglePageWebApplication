@@ -51,7 +51,7 @@ spa.avtr = (function (){
     };
     person_id = $target.attr('data-id');
 
-    configMap.chat_model.updateAvatar({
+    configMap.chat_model.update_avatar({
       person_id: person_id, css_map: css_map
     });
   };
@@ -62,6 +62,9 @@ spa.avtr = (function (){
 
     if($target.length === 0){ return false; }
     $target.css({ 'background-color': getRandRgb() });
+
+    //add original code
+    configMap.chat_model.set_chatee( $target.attr('data-id') );
     updateAvatar($target);
   };
 
@@ -116,10 +119,9 @@ spa.avtr = (function (){
       $nav = $(this),
       new_chatee = arg_map.new_chatee,
       old_chatee = arg_map.old_chatee;
-
       if(old_chatee){
         $nav
-          .find('.spa-avtr-box[data-id=' + old_chatee + ']')
+          .find('.spa-avtr-box[data-id=' + old_chatee.cid + ']')
           .removeClass('spa-x-is-chatee');
       }
 
@@ -137,7 +139,7 @@ spa.avtr = (function (){
       user = configMap.people_model.get_user(),
       chatee = configMap.chat_model.get_chatee() || {},
       $box;
-    
+
     $nav.empty();
 
     if(user.get_is_anon()){ return false; }

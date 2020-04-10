@@ -35,7 +35,7 @@ spa.fake = (function (){
     };
 
     emit_sio = function(msg_type, data){
-      var person_map;
+      var i,person_map;
 
       if(msg_type === "adduser" && callback_map.userupdate){
         setTimeout(function(){
@@ -73,7 +73,7 @@ spa.fake = (function (){
       }
 
       if(msg_type === "updateavatar" && callback_map.listchange){
-        for(var i = 0;i<peopleList.length;i++){
+        for(i = 0;i<peopleList.length;i++){
           if(peopleList[i]._id === data.person_id){
             peopleList[i].css_map = data.css_map;
             break;

@@ -233,7 +233,7 @@ spa.chat = (function (){
     var 
       new_chatee = arg_map.new_chatee,
       old_chatee = arg_map.old_chatee;
-    
+
     jqueryMap.$input.focus();
     if(!new_chatee){
       if(old_chatee){
@@ -252,7 +252,7 @@ spa.chat = (function (){
       .end()
       .find( '[data-id=' + arg_map.new_chatee.id + ']' )
       .addClass("spa-x-select");
-
+    
     writeAlert( "Now chatting with " + arg_map.new_chatee.name );
     jqueryMap.$title.text("Chat with " + arg_map.new_chatee.name );
     return true; 
@@ -263,14 +263,13 @@ spa.chat = (function (){
       list_html = String(),
       people_db = configMap.people_model.get_db(),
       chatee = configMap.chat_model.get_chatee();
-    
+ 
     people_db().each( function (person, idx){
       var select_class = "";
 
       if( person.get_is_anon() || person.get_is_user() ){
         return true;
       }
-
       if(chatee && chatee.id === person.id){
         select_class = ' spa-x-select';
       }

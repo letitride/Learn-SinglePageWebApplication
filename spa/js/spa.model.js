@@ -216,7 +216,6 @@ spa.model = (function (){
     if(id){ person.id = id; }
 
     stateMap.people_cid_map[ cid ] = person;
-    console.log(person);
     stateMap.people_db.insert( person );
     return person;
   };
