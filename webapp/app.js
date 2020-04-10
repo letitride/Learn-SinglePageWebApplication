@@ -5,7 +5,10 @@ var
   express = require('express'),
   routes = require('./routes'),
   app = express(),
-  server = http.createServer(app);
+  server = http.createServer(app),
+  socketIo = require('socket.io'),
+  io = socketIo.listen( server );
+
 
 app.configure( function(){
   app.use( express.bodyParser());
