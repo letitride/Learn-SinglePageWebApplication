@@ -6,6 +6,11 @@ var
   app = express(),
   server = http.createServer(app);
 
+app.configure( function(){
+  app.use( express.logger() );
+  app.use( express.bodyParser());
+  app.use( express.methodOverride() );
+});
 app.get( '/', function(request, response){
   response.send('Hello Express');
 });
