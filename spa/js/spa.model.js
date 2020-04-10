@@ -11,7 +11,7 @@ spa.model = (function (){
       user: null,
       is_connected: false
     },
-    isFakeData = false,
+    isFakeData = true,
     personProto, makeCid, clearPeopleDb, completeLogin,
     makePerson, removePerson, people, chat, initModule;
 

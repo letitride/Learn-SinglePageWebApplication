@@ -219,6 +219,7 @@ spa.chat = (function (){
   };
 
   onTapList = function(event){
+    console.log("onTapList");
     var $tapped = $( event.elem_target ), chatee_id;
     if(! $tapped.hasClass("spa-chat-list-name")){ return false; }
 
@@ -258,10 +259,11 @@ spa.chat = (function (){
     return true; 
   };
 
-  onListchange = function(event){
+  onListchange = function(event, arg_map){
     var 
       list_html = String(),
       people_db = configMap.people_model.get_db(),
+      //何故かget_chateeがnullになる
       chatee = configMap.chat_model.get_chatee();
  
     people_db().each( function (person, idx){

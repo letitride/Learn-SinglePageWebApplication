@@ -79,7 +79,10 @@ spa.fake = (function (){
             break;
           }
         }
-        callback_map.listchange([ peopleList ]);
+        //これで何故かチャット欄のユーザリストを再描画しているが、
+        //chat.onSetChateeですでにchatee設定済み & onListChangeでchateeが何故かundefinedなのでうまく動かない
+        //model._publish_listchnge()
+        //callback_map.listchange([ peopleList ]);
       }
     };
 
