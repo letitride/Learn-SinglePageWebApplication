@@ -3,9 +3,18 @@
   <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script id="script_a" src="/js/data.js"></script>
     <script>
-      io.connect().on( 'message', function( count ){
-        $('body').html( count);
+      $(function(){
+        $('body').html(b);
+      });
+      io.connect('http://localhost').on( 'script', function( path ){
+        console.log('path');
+        $( '#script_a').remove();
+        $( 'head').append(
+          '<script id="script_a" src="' + path + '"></srcipt>'
+        );
+        $('body').html(b);
       });
     </script>
   </head>
