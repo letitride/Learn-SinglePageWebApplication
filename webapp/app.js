@@ -34,6 +34,11 @@ app.get( '/user/list', function(request, response){
  response.send({ title: 'user list'});
 });
 
+app.post( '/user/create', function(request, response){
+  response.contentType( 'json');
+  response.send( {title: 'user created'});
+});
+
 server.listen( 3000 );
 
 console.log(
