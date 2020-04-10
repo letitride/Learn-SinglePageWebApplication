@@ -28,6 +28,12 @@ app.configure( 'production', function(){
 app.get( '/', function(request, response){
   response.redirect( '/spa.html' );
 });
+
+app.get( '/user/list', function(request, response){
+ response.contentType( 'json');
+ response.send({ title: 'user list'});
+});
+
 server.listen( 3000 );
 
 console.log(
