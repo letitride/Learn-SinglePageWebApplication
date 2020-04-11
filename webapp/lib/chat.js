@@ -55,18 +55,20 @@ chatObj = {
                   cid = user_map.cid;
               delete user_map.cid;
               if( result_list.length > 0 ){
-                console.log(result_list);
                 result_map = result_list[0];
                 result_map.cid = cid;
+                console.log(result_map);
                 signIn(io, result_map, socket);
               }
               else{
                 user_map.is_online = true;
                 crud.construct('user', user_map, function(result_list){
-                  result_map = result_list;
+                  result_map = result_list.ops[0];
                   result_map.cid = cid;
                   chatterMap[result_map._id] = socket;
                   socket.user_id = result_map._id;
+                  console.log("aaaaaaaaaa");
+                  console.log(result_map);
                   socket.emit('userupdate', result_map);
                   emitUserList(io);
                 });
@@ -95,7 +97,13 @@ chatObj = {
           console.log( '** user %s closed browser window or tab **', socket.user_id);
           signOut(io, socket.user_id);
         } );
-        socket.on( 'updateavatar', function(){} );
+
+        socket.on( 'updateavatar', function( avtr_map ){
+          crud.update( 'user', 
+            {'_id': makeMongoId( avtr_map.person_id)},{css_map: avtr_map.css_map},
+            function(result_list){ emitUserList(io); }
+          );
+        } );
       });
     return io;
   }

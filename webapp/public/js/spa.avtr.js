@@ -156,6 +156,7 @@ spa.avtr = (function (){
         class_list.push('spa-x-is-user');
       }
 
+      console.log(person);
       $box = $('<div/>')
         .addClass(class_list.join(' '))
         .css( person.css_map )

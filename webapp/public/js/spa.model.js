@@ -73,7 +73,9 @@ spa.model = (function (){
     };
 
     _publish_listchnge = function(arg_list){
+      console.log("go list update");
       _update_list(arg_list);
+      console.log("go dom change");
       $.gevent.publish("spa-listchange", [arg_list]);
     };
 
