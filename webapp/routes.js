@@ -6,10 +6,17 @@ const client = new mongo.MongoClient(url);
 const dbName = 'spa';
 
 var
-  configRoutes,
+  loaeSchema, configRoutes,
+  fsHandle = require('fs'),
   dbHandle,
   makeMongoId = mongo.ObjectID,
   objTypeMap = {'user': {}};
+
+loaeSchema = function( schema_name, schema_path ){
+  fsHandle.readFile( schema_path, 'utf8', function( err, data){
+    objTypeMap[ schema_name ] = JSON.parse(data);
+  });
+};
 
 client.connect(function(err, client) {
   dbHandle = client.db(dbName);
@@ -95,5 +102,15 @@ configRoutes = function( app, server ){
     });
   });
 };
+
+(function(){
+  var schema_name, schema_path;
+  for (schema_name in objTypeMap ){
+    if( objTypeMap.hasOwnProperty( schema_name ) ){
+      schema_path = __dirname + '/' + schema_name + '.json';
+      loaeSchema( schema_name, schema_path);
+    }
+  }
+})();
 
 module.exports = { configRoutes: configRoutes };
