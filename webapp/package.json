@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "express": "3.2.x",
-    "mongo": "^0.1.0",
     "mongodb": "^3.5.5",
-    "socket.io": "0.9.x"
+    "socket.io": "0.9.x",
+    "JSV": "4.0.x"
   }
 }
