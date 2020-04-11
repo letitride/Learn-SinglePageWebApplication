@@ -246,6 +246,7 @@ spa.model = (function (){
     get_user = function(){ return stateMap.user;};
 
     login = function(name){
+      console.log("login...");
       var sio = isFakeData ? spa.fake.mockSio : spa.data.getSio();
       stateMap.user = makePerson({
         cid: makeCid(),

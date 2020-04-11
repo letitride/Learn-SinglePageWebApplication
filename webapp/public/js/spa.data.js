@@ -10,6 +10,8 @@ spa.data = (function (){
 
     return {
       emit: function(event_name, data){
+        console.log(event_name);
+        console.log(data);
         socket.emit( event_name, data );
       },
       on: function(event_name, callback){
