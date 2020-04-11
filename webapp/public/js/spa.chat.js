@@ -206,7 +206,6 @@ spa.chat = (function (){
   };
 
   onSubmitMsg = function( event ){
-    console.log("onSubmitMsg");
     var msg_text = jqueryMap.$input.val();
     if( msg_text.trim() === "" ){ return false; }
     configMap.chat_model.send_msg( msg_text );

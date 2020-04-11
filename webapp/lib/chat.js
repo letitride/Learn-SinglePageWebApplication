@@ -1,7 +1,7 @@
 "use strict";
 
 var 
-  emitUserList, signIn, chatObj,
+  emitUserList, signIn, signOut, chatObj,
   socket = require('socket.io'),
   crud = require('./crud'),
 
@@ -31,6 +31,14 @@ signIn = function(io, user_map, socket){
   socket.user_id = user_map._id;
 };
 
+signOut = function(io, user_id){
+  crud.update(
+    'user',
+    {'_id': user_id}, {is_online: false},
+    function( result_list ){ emitUserList(io); }
+  );
+  delete chatterMap[ user_id];
+};
 
 chatObj = {
   connect: function( server ){
@@ -78,8 +86,15 @@ chatObj = {
             });
           }
         });
-        socket.on( 'learvechat', function(){} );
-        socket.on( 'disconnect', function(){} );
+        socket.on( 'learvechat', function(){
+          console.log('** user %s logged out **', socket.user_id );
+          signOut( io, socket.user_id);
+        } );
+
+        socket.on( 'disconnect', function(){
+          console.log( '** user %s closed browser window or tab **', socket.user_id);
+          signOut(io, socket.user_id);
+        } );
         socket.on( 'updateavatar', function(){} );
       });
     return io;
