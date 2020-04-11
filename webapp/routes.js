@@ -6,8 +6,10 @@ const client = new mongo.MongoClient(url);
 const dbName = 'spa';
 
 var
-  loaeSchema, configRoutes,
+  loaeSchema, checkSchema, configRoutes,
   fsHandle = require('fs'),
+  JSV = require('JSV').JSV,
+  validator = JSV.createEnvironment(),
   dbHandle,
   makeMongoId = mongo.ObjectID,
   objTypeMap = {'user': {}};
@@ -16,6 +18,14 @@ loaeSchema = function( schema_name, schema_path ){
   fsHandle.readFile( schema_path, 'utf8', function( err, data){
     objTypeMap[ schema_name ] = JSON.parse(data);
   });
+};
+
+checkSchema = function( obj_type, obj_map, callback ){
+  var
+    schema_map = objTypeMap[ obj_type ],
+    report_map = validator.validate(obj_map, schema_map);
+
+  callback( report_map.errors );
 };
 
 client.connect(function(err, client) {
@@ -50,18 +60,30 @@ configRoutes = function( app, server ){
   });
   
   app.post( '/:obj_type/create', function(request, response){
-    dbHandle.collection(
-      request.params.obj_type, function(outer_error, collection){
-        var
-          option_map = {safe: true},
-          obj_map = request.body;
-        collection.insert(
-          obj_map, option_map, function( inner_error, result_map ){
-            response.send(result_map);
+    var
+      obj_type = request.params.obj_type,
+      obj_map = request.body;
+    
+    checkSchema( obj_type, obj_map, function(error_list){
+      if( error_list.length === 0){
+        dbHandle.collection(
+          obj_type, function(outer_error, collection){
+            var option_map = {safe: true};
+            collection.insert(
+              obj_map, option_map, function( inner_error, result_map ){
+                response.send(result_map);
+              }
+            );
           }
         );
       }
-    );
+      else{
+        response.send({
+          error_msg: 'Input document not valid',
+          error_list : error_list
+        });
+      }
+    });
   });
   
   app.get( '/:obj_type/read/:id', function(request, response){
@@ -76,19 +98,31 @@ configRoutes = function( app, server ){
   app.post( '/:obj_type/update/:id', function(request, response){
     var
       find_map = { _id: makeMongoId(request.params.id) },
-      obj_map = request.body;
+      obj_map = request.body,
+      obj_type = request.params.obj_type;
 
-    dbHandle.collection( request.params.obj_type, function(outer_error, collection){
-      var
-        sort_order = [],
-        options_map = {
-          'new': true, upsert: false, safe: true
-        };
-        collection.findAndModify( find_map, sort_order, obj_map, options_map,
-          function( inner_error, update_map){
-            response.send( update_map);
+    checkSchema(obj_type, obj_map, function(error_list){
+      if(error_list.length == 0 ){
+        dbHandle.collection( obj_type, function(outer_error, collection){
+          var
+            sort_order = [],
+            options_map = {
+              'new': true, upsert: false, safe: true
+            };
+            collection.findAndModify( find_map, sort_order, obj_map, options_map,
+              function( inner_error, update_map){
+                response.send( update_map);
+            });
         });
+      }
+      else{
+        request.send({
+          error_msg: 'Input document not valid',
+          error_list: error_list
+        });
+      }
     });
+
   });
   
   app.get( '/:obj_type/delete/:id', function(request, response){

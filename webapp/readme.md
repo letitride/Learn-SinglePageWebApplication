@@ -29,3 +29,13 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"css_map":{"color":"#2e0
 ```
 $ curl http://localhost:3000/horse/list
 ```
+
+# 8.4.2.5 受信クライアントデータを検証する
+
+```
+# leftプロパティが欠落
+$ curl -X POST -H "Content-Type: application/json" -d '{"name":"Bety","css_map":{"background-color":"#ddd","top":22}}' localhost:3000/user/create
+
+# 登録可能
+$ curl -X POST -H "Content-Type: application/json" -d '{"name":"Bety","css_map":{"background-color":"#ddd","top":22, "left":500 }}' localhost:3000/user/create
+```
