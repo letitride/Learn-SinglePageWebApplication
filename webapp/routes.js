@@ -8,7 +8,8 @@ const dbName = 'spa';
 var
   configRoutes,
   dbHandle,
-  makeMongoId = mongo.ObjectID;
+  makeMongoId = mongo.ObjectID,
+  objTypeMap = {'user': {}};
 
 client.connect(function(err, client) {
   dbHandle = client.db(dbName);
@@ -21,7 +22,12 @@ configRoutes = function( app, server ){
   
   app.all( '/:obj_type/*?', function( request, response, next ){
     response.contentType( 'json');
-    next();
+    if(objTypeMap[ request.params.obj_type ]){
+      next();
+    }
+    else{
+      response.send({ error_msg: request.params.obj_type + " is not a valie object type" });
+    }
   });
   
   app.get( '/:obj_type/list', function(request, response){
