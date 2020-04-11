@@ -8,10 +8,18 @@ var
   makeMongoId = crud.makeMongoId,
   chatterMap = {};
 
+emitUserList = function(io){
+  crud.read('user', {is_online: true},{}, function(result_list){
+    io.
+      of('/chat')
+      .emit('listchange', result_list);
+  });
+};
+
 signIn = function(io, user_map, socket){
   crud.update(
     'user',
-    {'_id': user_map.id},
+    {'_id': user_map._id},
     {is_online: true },
     function( result_map ){
       emitUserList(io);
@@ -19,7 +27,10 @@ signIn = function(io, user_map, socket){
       socket.emit('userupdate', user_map);
     }
   );
+  chatterMap[ user_map._id] = socket;
+  socket.user_id = user_map._id;
 };
+
 
 chatObj = {
   connect: function( server ){
@@ -37,7 +48,6 @@ chatObj = {
               delete user_map.cid;
               if( result_list.length > 0 ){
                 console.log(result_list);
-
                 result_map = result_list[0];
                 result_map.cid = cid;
                 signIn(io, result_map, socket);
@@ -57,7 +67,17 @@ chatObj = {
           );
         });
 
-        socket.on( 'updatechat', function(){} );
+        socket.on( 'updatechat', function( chat_map ){
+          if( chatterMap.hasOwnProperty(chat_map.dest_id) ){
+            chatterMap[ chat_map.dest_id ]
+              .emit( 'updatechat', chat_map );
+          }else{
+            socket.emit('updatechat', {
+              sender_id: chat_map.sender_id,
+              msg_text: chat_map.dest_name + ' has gone offline.'
+            });
+          }
+        });
         socket.on( 'learvechat', function(){} );
         socket.on( 'disconnect', function(){} );
         socket.on( 'updateavatar', function(){} );

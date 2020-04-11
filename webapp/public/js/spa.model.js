@@ -119,9 +119,10 @@ spa.model = (function (){
     send_msg = function(msg_text){
       var msg_map,
         sio = isFakeData ? spa.fake.mockSio : spa.data.getSio();
+        console.log(msg_text);
 
       if(!sio){ return false; }
-      if(!(stateMap.user && chatee)){ return false; }
+      if(!(stateMap.user && chatee)){ console.log("no onlien user"); return false; }
 
       msg_map = {
         dest_id: chatee.id,
