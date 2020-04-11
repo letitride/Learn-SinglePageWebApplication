@@ -3,12 +3,11 @@
 var
   http = require('http'),
   express = require('express'),
-  routes = require('./routes'),
+  routes = require('./lib/routes'),
   app = express(),
   server = http.createServer(app),
   socketIo = require('socket.io'),
   io = socketIo.listen( server );
-
 
 app.configure( function(){
   app.use( express.bodyParser());

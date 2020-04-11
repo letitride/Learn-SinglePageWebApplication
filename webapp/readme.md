@@ -38,4 +38,10 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"name":"Bety","css_map":
 
 # 登録可能
 $ curl -X POST -H "Content-Type: application/json" -d '{"name":"Bety","css_map":{"background-color":"#ddd","top":22, "left":500 }}' localhost:3000/user/create
+
+# 更新
+$ curl -X POST -H "Content-Type: application/json" -d '{"name":"Hana","css_map":{"background-color":"#ddd","top":22, "left":500 }}' localhost:3000/user/update/5e9133f3b06897647b0edaaf
+
+# 削除
+$ curl http://localhost:3000/user/delete/5e9133f3b06897647b0edaaf
 ```
